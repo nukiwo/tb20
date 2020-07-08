@@ -6,6 +6,7 @@
 </head>
 <body>
     <?php
+//簡易掲示板
     // DB接続設定
 	$dsn = 'データベース名';
 	$user = 'ユーザー名';
@@ -21,6 +22,7 @@
 	.");";
 	$stmt = $pdo->query($sql);
     
+    //編集機能
 	$pass_error=false;
     if(!empty($_POST["num_edit"])&&
     !empty($_POST["pass_edit"])&&!empty($_POST["submit3"]))
@@ -74,6 +76,7 @@
     </form>
 
 <?php
+    //入力機能と編集機能
     if(!empty($_POST["name"])&& !empty($_POST["comment"])&&
         !empty($_POST["password"])&& !empty($_POST["submit1"]))
     {
@@ -83,6 +86,7 @@
     	$data = date("Y年m月d日 H時i分s秒");
     	if(empty($_POST["num"]))
         {
+	    //入力機能
             $sql = 'SELECT max(id) as id FROM mission5';
             $stmt = $pdo->query($sql);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -92,6 +96,7 @@
             VALUES (:id, :name, :comment, :password, :data)");
         }else
         {
+	    //編集機能
             $id = $_POST["num"];
         	$sql = 'UPDATE mission5 SET name=:name,comment=:comment, 
             password=:password,data=:data WHERE id=:id';
@@ -105,6 +110,7 @@
         $stmt -> execute();
     }
 	
+	//削除機能
 	if(!empty($_POST["num_delete"])&&
         !empty($_POST["pass_delete"])&& !empty($_POST["submit2"]))
     {
@@ -126,7 +132,8 @@
     	$stmt->bindParam(':pass_delete',$pass_delete, PDO::PARAM_STR);
     	$stmt->execute();
     }
-    
+    	
+    //エラー表示
     echo "<br>";
     if(!empty($_POST["submit1"])){
         if(empty($_POST["name"])){
@@ -158,6 +165,7 @@
     ------------------------------------------------<br>
     【　投稿一覧　】<br><br>
 <?php
+	//ブラウザに表示
 	$sql = 'SELECT * FROM mission5';
 	$stmt = $pdo->query($sql);
 	$results = $stmt->fetchAll();
